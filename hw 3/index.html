@@ -1,0 +1,135 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/09/09 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netId: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>hw3</title>
+    </head>
+    <body>
+        <br>
+        <!-- P1 -->
+        <p id = "p1">
+            <b>Problem 1:<br></b>
+            Create 400x400 SVG image and append it with text and shapes using d3.js:<br>
+            <br>
+            <svg id = "svg1" width = "400" height = "400"></svg>
+            <script id="scpt1">
+                let svg1 = d3.select("#svg1");
+
+                // create circle
+                svg1.append("circle")
+                    .attr("cx", 200)
+                    .attr("cy", 200)
+                    .attr("r", "5px")
+                    .style("fill", "lightblue");
+
+                // create "Corenll!" text
+                svg1.append("text")
+                    .attr("x", 200)
+                    .attr("y", 200)
+                    .text("Cornell!")
+                    .attr("text-anchor", "middle")
+                    .style("font-family", "Verdana")
+                    .style("fill", "darkred")
+                    .style("font-size", "20px");
+
+                // create rectangle_1
+                svg1.append("rect")
+                    .attr("x", 100)
+                    .attr("y", 100)
+                    .attr("width", 50)
+                    .attr("height", 30)
+                    .style("fill", "lightgreen")
+                    .style("stroke", "darkblue");
+                
+                // create rectangle_2
+                svg1.append("rect")
+                    .attr("x", 250)
+                    .attr("y", 250)
+                    .attr("width", 40)
+                    .attr("height", 50)
+                    .style("fill", "pink")
+                    .style("stroke", "red");
+
+                // create rectangle_3
+                svg1.append("rect")
+                    .attr("x", 220)
+                    .attr("y", 130)
+                    .attr("width", 50)
+                    .attr("height", 15)
+                    .style("fill", "yellow")
+                    .style("stroke", "purple");
+
+            </script>       
+            
+        </p>
+        <br>
+
+        <!-- P2 -->
+        <p id="p2">
+            <b>Problem 2:<br></b>
+            Recreate the same plot from hw2 using d3.js:<br>
+            
+            <svg id = "svg2" width = "360" height = "360" style="border: 1px solid black;"></svg>
+            <script id="scpt2">
+                let svg2 = d3.select("#svg2");
+
+                // data points
+                data = [{"x":1.0 ,"y":1.0},
+                        {"x":2.0 ,"y":2.0},
+                        {"x":3.0 ,"y":3.0},
+                        {"x":3.8 ,"y":5.0},
+                        {"x":4.4 ,"y":6.4},
+                        {"x":5.8 ,"y":7.5},
+                        {"x":7.3 ,"y":8.2},
+                        {"x":8.3 ,"y":8.7},
+                        {"x":9.3 ,"y":9.2}];
+                
+                // x scale function
+                function getX(x){
+                    return 20 + x * 32;
+                }
+                // y scale function
+                function getY(y){
+                    return 340 - y * 32;
+                }
+
+                
+                // create lines
+                for (let i = 20; i <= 340; i += 32) {
+                    svg2.append("path")
+                        .style("stroke", "grey")
+                        .style("stroke-width", 1)
+                        .attr("d", "M" + i + ",20 L" + i + ",340");                      
+                }
+                for (let i = 20; i <= 340; i += 32) {
+                    svg2.append("path")
+                        .style("stroke", "grey")
+                        .style("stroke-width", 1)
+                        .attr("d", "M20," + i + " L340," + i);                      
+                }
+
+            
+                // add data points to the plot    
+                data.forEach((point) =>{
+                    svg2.append("circle")
+                        .attr("cx", getX(point["x"]))
+                        .attr("cy", getY(point["y"]))
+                        .attr("r", "10px")
+                        .style("fill", "darkred");
+                    }
+                );
+
+
+            </script>
+
+        </p>
+       
+    </body>
+</html>
+
