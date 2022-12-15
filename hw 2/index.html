@@ -1,0 +1,104 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/09/01 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netId: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <title>hw2</title>
+    </head>
+    <body>
+        <br>
+        <!-- P1 -->
+        <p id = "p1">
+            <b>Problem 1:<br></b>
+            Create 360x360 SVG image:<br>
+            <br>
+            
+            <svg height = "360" width = "360" style="border: 1px solid black; padding: 20px">
+                <!-- horizontal line-->
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 20 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 52 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 84 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 116 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 148 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 180 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 212 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 244 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 276 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 308 H 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 340 H 340"></path>
+                
+                <!-- vertical line-->
+                <path style="stroke:#ccc; stroke-width:1" d ="M 20 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 52 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 84 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 116 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 148 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 180 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 212 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 244 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 276 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 308 20 V 340"></path>
+                <path style="stroke:#ccc; stroke-width:1" d ="M 340 20 V 340"></path>
+
+                <!-- points -->
+                // origin = (20, 340)
+                // cx = 20 + (x * 32)
+                // cy = 340 - (y * 32)
+                <circle cx = "52" cy = "308" r = "8" style="fill: darkblue"></circle>       // 1.0, 1.0
+                <circle cx = "84" cy = "276" r = "8" style="fill: darkblue"></circle>       // 2.0, 2.0
+                <circle cx = "116" cy = "244" r = "8" style="fill: darkblue"></circle>      // 3.0, 3.0
+                <circle cx = "141.6" cy = "180" r = "8" style="fill: darkblue"></circle>    // 3.8, 5.0
+                <circle cx = "160.8" cy = "135.2" r = "8" style="fill: darkblue"></circle>  // 4.4, 6.4
+                <circle cx = "205.6" cy = "100" r = "8" style="fill: darkblue"></circle>    // 5.8, 7.5
+                <circle cx = "253.6" cy = "77.6" r = "8" style="fill: darkblue"></circle>   // 7.3, 8.2
+                <circle cx = "285.6" cy = "61.6" r = "8" style="fill: darkblue"></circle>   // 8.3, 8.7
+                <circle cx = "317.6" cy = "45.6" r = "8" style="fill: darkblue"></circle>   // 9.3, 9.2
+
+            </svg>
+        </p>
+        <br>
+
+        <!-- P2 -->
+        <p id="p2">
+            <b>Problem 2:<br></b>
+            a) The marks are used as circles with radius 8 filled with darkblue color. <br>
+            b) The two visual channels are the x-axis position(cx) and y-axis position(cy) after transitioning. And these channels are aligned to the original data. <br> 
+        </p>
+        <br>
+
+        <!-- P3 -->
+        <p id="p3">
+            <b>Problem 3:<br></b>
+            Create our own Piet Mondrian painting (at least 6 lines and 3 rectangles):<br>
+            <br>
+
+            <svg height = "300", width = "300">
+                <!-- 3+ rectangles -->
+                <rect x="0" y="208.5" width="47.5" height="92.5" fill="yellow"></rect>
+                <rect x="50" y="48" width="50" height="126" fill="red"></rect>
+                <rect x="100" y="172" width="120" height="66" fill="blue"></rect>
+                <rect x="220" y="48" width="30" height="50" fill="yellow"></rect>
+                <rect x="220" y="98" width="30" height="50" fill="red"></rect>
+                <rect x="220" y="148" width="30" height="25" fill="white"></rect>
+                <rect x="250" y="268" width="50" height="32" fill="red"></rect>
+                <rect x="50" y="20" width="50" height="30" fill="blue"></rect>
+
+                <!-- 6+ lines -->
+                <line x1="50" y1="0" x2="50" y2="300" stroke-width="5" stroke="black"></line>
+                <line x1="100" y1="0" x2="100" y2="300" stroke-width="9" stroke="black"></line>
+                <line x1="0" y1="48" x2="300" y2="48" stroke-width="5" stroke="black"></line>
+                <line x1="0" y1="172" x2="300" y2="172" stroke-width="7" stroke="black"></line>
+                <line x1="250" y1="0" x2="250" y2="300" stroke-width="9" stroke="black"></line>
+                <line x1="220" y1="48" x2="220" y2="172" stroke-width="9" stroke="black"></line>
+                <line x1="100" y1="268" x2="300" y2="268" stroke-width="11" stroke="black"></line>              
+
+            </svg>
+
+           
+
+    </body>
+</html>
