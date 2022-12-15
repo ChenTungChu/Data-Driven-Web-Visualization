@@ -1,0 +1,134 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/08/26 -->
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>hw1</title>
+        <link rel="icon" href="wheel_logo.ico"/> 
+    </head>
+    <body>
+
+        <!-- Q1 -->
+        <p id = "p1">
+            <b>Problem 1:</b><br>
+            <br>
+
+            A: Identify the canonical JavaScript type:<br>
+   
+            <ul>
+            a) dingus: No.<br> 
+            b) array: No, arrays are not canonical JavaScript types.<br>
+            c) boolean: Yes.<br>
+            d) int: No, int is not a canonical JavaScript type, it is defined as number<br>
+            e) number: Yes, number is a canonical JavaScript type.<br>
+            f) class: No, JavaScript does not have classes.<br>
+            g) regex: No, regex is defined as a string.<br>
+            h) string: Yes.<br>
+            i) Unicode: No, unicode is not a canonical JavaScript type, it is defined as string<br>
+            j) object: Yes.<br>
+            k) null: Yes.<br>
+            l) function: Yes.<br>
+            m) NaN: No, NaN is defined as a number.<br>
+            n) char: No, there is no char in JavaScript.<br>
+            o) pointer: No.<br>
+            p) undefined: Yes.<br>
+            </ul>
+            <br>
+
+            B: Examples of canonical JavaScript types:<br>
+            <script id = "p1_b">
+                console.log(typeof(true));          // boolean
+                console.log(typeof(30));            // number
+                console.log(typeof("abc"));         // string
+                console.log(typeof(Object()));      // object
+                console.log(typeof(consle.log));    // function
+                console.log(typeof(null));          // null
+                console.log(typeof(undefined));     // undefined
+            </script>
+            <br>
+
+            C: Indentify unusal or unexpected JavaScript type behaviors:<br>
+            <script id = "p1_c">
+                console.log(typeof(NaN));           // number
+                console.log(typeof(char));          // char    => undefined
+                console.log(typeof(pointer));       // pointer => undefined
+            </script>
+        </p>
+        <br>
+
+        <!-- Q2 -->
+        <p id = "p2">
+            <b>Problem 2:</b>
+            <br>
+            <ol>
+                <li>
+                    Type coercion means that JavaScript converts one type to another.
+                </li>
+                <li>
+                    In Python, we cannot add an integer to a string cause it will raise TypeError.<br>
+                    However, in JavaScript, we can add an integer to a string and the output will be a string.
+                    <img src = "error.jpg" alt = "TypeError">
+                </li>
+                <li>
+                    In Python, we cannot concatenate an integer to a list, while in JavaScript, it does not matter.<br>
+                    The output will also be string with the first/last element concatenated with the input integer.
+                    <img src = "error2.jpg" alt = "Concatenate Error">
+                </li>
+                <li>
+                    Examples of type coercion:<br>
+                    <script id = "p2_4">
+                        console.log(1 + "2");       // 12
+                        console.log("1" + 2);       // 12
+                        console.log([1,2,3] + 3)    // 1,2,33
+                        console.log(3 + [1,2,3])    // 31,2,3
+                    </script>
+                </li>
+
+            </ol>
+
+        </p>
+        <br>
+
+        <!-- Q3 -->
+        <p id = "p3">
+            
+            <b>Problem 3:</b><br>
+            <br>
+            Built a factorial function:
+            <script id = "p3">
+                function fact(n) {
+                    if (n < 0){
+                        return undefined
+                    }
+                    else if (n == 0) {
+                        return 1;
+                    } else {
+                        return n * fact(n-1);
+                    }
+                }
+
+                console.log( fact(-2) );
+                console.log( fact(0) );
+                console.log( fact(1) );
+                console.log( fact(5) );
+                console.log( fact(12) );
+
+            </script>
+        </p>
+        <br>
+
+         <!-- Q4 -->
+         <p id = "p4">
+            <b>Problem 4:</b><br>
+            <br>
+            Assignments will be posted to CMS on Mondays, we have to look up the course schedule to make sure the due date.<br>
+            For any late submission, wrong format of compressed file that caused the grader unable to open it, or submissions with missing files will not be accepted.<br>
+            However, we have 5 slip days for use if we are unable to submit the assignment before deadline.<br>
+            Also, the lowest two grades will be dropped.<br>
+
+
+
+
+    </body>
+</html>
