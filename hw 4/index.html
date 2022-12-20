@@ -1,0 +1,128 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/09/20 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netID: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>hw3</title>
+    </head>
+    <style>
+        .gridlines line{
+            stroke: #bbb;
+        }
+        .gridlines .domain{
+            stroke: none;
+        }
+    </style>
+    <body>
+        <br>
+        <!-- P1 -->
+        <p id="p1">
+            <b>Problem 1:<br></b>
+            Identify the <b>marks</b> and <b>visual channels</b>:<br>
+            <br>
+                A)<br>
+                <b>Marks</b>: Different hues in different regions(counties).<br>
+                <b>Channels</b>: Varying hues according to the fraction of precipitation lost.<br>
+                <br>
+                B)<br>
+                <b>Marks</b>: Circle dots.<br>
+                <b>Channels</b>: Aligned positions for both horizontal and vertical directions, while different hues represent different recipes.<br>
+                <br>
+                C)<br>
+                <b>Marks</b>: Box channels.<br>
+                <b>Channels</b>: Aligned positions for both horizontal and vertical directions.<br>
+            <br>
+            <br>
+        </p>
+
+        <!-- P2 -->
+        <p id="p2">
+            <b>Problem 2:<br></b>
+            Plot data about Moore's Law:<br>
+            <br>
+            <svg id="svg2"></svg>
+            <script>
+                // read data
+                d3.json("./chip_dataset.json").then((data) => {
+                    width = 500;
+                    height = 500;
+                    let svg1 = d3.select("svg#svg2")
+                                 .attr("width", width)
+                                 .attr("height", height)
+
+                    const margins =  {top: 10, right: 10, bottom: 50, left: 50};
+                    const chartWidth = width - margins.left - margins.right;
+                    const chartHeight = height - margins.top - margins.bottom;
+
+
+                    let chartArea = svg1.append('g')
+                                        .attr('transform', `translate(${margins.left}, ${margins.top})`);
+
+                    let releaseDay_extd = d3.extent(data, d => d['Release Day']);
+                    let transistors_extd = d3.extent(data, d => d['Transistors(million)']);
+
+                    // create scale functions
+                    const xScale = d3.scaleLinear()
+                                     .domain([releaseDay_extd[0], releaseDay_extd[1]])
+                                     .range([0, chartWidth]);
+                    const yScale = d3.scaleLog()
+                                     .domain([transistors_extd[0], transistors_extd[1]])
+                                     .range([chartHeight,  0]);        // reverse the range
+                    
+                    // create axes and gridlines
+                    let leftAxis1 = d3.axisLeft(yScale)
+                                   
+                    svg1.append('g')
+                        .attr('class', 'y axis')
+                        .attr('transform', `translate(${margins.left-10}, ${margins.top})`)
+                        .call(leftAxis1);
+
+                    let leftAxis2 = d3.axisLeft(yScale)
+                                      .tickSize(-chartWidth-10)
+                                      .tickFormat('')
+                    
+                    svg1.append('g')
+                        .attr('class', 'y gridlines')
+                        .attr('transform', `translate(${margins.left-10}, ${margins.top})`)
+                        .call(leftAxis2);
+
+                    let xAxis1 = d3.axisBottom(xScale)
+    
+                    svg1.append('g')
+                        .attr('class', 'x axis')
+                        .attr('transform', `translate(${margins.left}, ${chartHeight+margins.top*2})`)
+                        .call(xAxis1);
+                    
+                    let xAxis2 = d3.axisBottom(xScale)
+                                    .tickSize(-chartHeight-10)
+                                    .tickFormat('');
+
+                    svg1.append('g')
+                        .attr('class', 'x gridlines')
+                        .attr('transform', `translate(${margins.left}, ${chartHeight+margins.top*2})`)
+                        .call(xAxis2);
+
+                        data.forEach( (d, i) => {
+                            chartArea.append('circle')
+                                .attr('cx', xScale(d['Release Day']))
+                                .attr('cy', yScale(d['Transistors(million)']))
+                                .attr('r', 3)
+                                .attr('opacity', 0.3)
+                                .attr('index', i)  
+                                .style('fill', 'darkblue');
+                            });
+
+                })
+
+            </script>
+            
+        </p>
+       
+    </body>
+</html>
+
