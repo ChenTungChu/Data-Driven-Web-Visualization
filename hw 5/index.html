@@ -1,0 +1,143 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/09/22 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netID: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>hw3</title>
+    </head>
+    <body>
+        <br>
+        <!-- P1 -->
+        <b>Problem 1:</b>
+        <ul id="p1">
+           <li>
+            This is a divergent scale.<br>
+            This is not an efficive color scale since there are too many colors involved thus it is hard to distinguish neutral middle point. 
+           </li>
+           <li>
+            This may be an effective color scale since it uses a single color sequential scale to represent the likeness of the data. 
+           </li>
+           <li>
+            Through <a href="https://www.color-blindness.com/coblis-color-blindness-simulator/">blindness simulator</a>, I found out that the test image would cause a loss of perceivable hue variation for people with Protanopia, Deuteranopia, Tritanopia, Protanomaly, and Tritanomaly. 
+           </li>
+           <li>
+            I would not recommend this rainbow color scale because for average life expectancy, it would be hard to distinguish which color be the higher or lower value.
+            I think that we should use a single color sequential scale for this case.   
+           </li>
+            <br>
+            <br>
+        </ul>
+
+        <!-- P2 -->
+        <p id="p2">
+            <b>Problem 2:<br></b>
+            <br>
+            <svg id="svg2"></svg>
+            <script>
+                // read data
+                d3.csv("NCAA_shots.csv").then((data) => {
+                    width = 500;
+                    height = 500;
+                    let svg1 = d3.select("svg#svg2")
+                                 .attr("width", width)
+                                 .attr("height", height)
+                                 .style("background-color", "black");
+                    //console.log(data)
+                    
+                    // adjust the x, y, width, height
+                    data.forEach((d, i) => {
+                        d['x'] = d['x'] * 5;
+                        d['y'] = d['y'] * 5;
+                        d['width'] = d['width'] * 5;
+                        d['height'] = d['height'] * 5;
+                    })
+                    //console.log(data);
+
+                    attempt_extnt = d3.extent(data, d => d['log_attempt']);
+                    attemptScale = d3.scaleLinear()
+                                     .domain(attempt_extnt)
+                                     .range([0, 1]);
+                    
+                    // create new sequential color scale
+                    function colorScale(data){
+                        return d3.interpolateViridis(attemptScale(data));
+                    }
+
+                    svg1.selectAll('rect').data(data)
+                        .join('rect')
+                        .attr('x', d => d['x'])
+                        .attr('y', d => d['y'])
+                        .attr('width', d => d['width'])
+                        .attr('height', d => d['height'])
+                        .style('fill', d => colorScale(d['log_attempt']));
+                        
+                })
+            </script>
+            <br>
+            The advantage of using logarithmic scale is that it can better show the difference between the number of attempts. For example, if the number of attempts varies in a large number, the difference between the two shots is not obvious. However, if we use logarithmic scale, the difference between the two shots is obvious. 
+            The disadvantage of using logarithmic scale is that it is not easy to understand the actual number of attempts. It is only easy to undestand the stats on the heatmap. 
+            
+        </p>
+        <br>
+        <br>
+
+        <!-- P3 -->
+        <p id="p3">
+            <b>Problem 3:<br></b>
+            <svg id="svg3"></svg>
+            <div>
+                <input  id='slider' type='range' min='0' max='200' value='80' step='1'>
+            </div>
+            
+            <script>
+                let svg1 = d3.select("svg#svg3")
+                             .attr("width", 420)
+                             .attr("height", 420)
+                
+                
+                let colorDict = []
+                for (i = 0; i <= 20; i++){
+                    for (j = 0; j <= 20; j++){
+                        colorDict.push({'h': i*18, 'c': j*5});
+                    }
+                }
+                //console.log(colorDict)
+
+                // scale to make your circle placement easier
+                const hScale = d3.scaleLinear()
+                                 .domain([0, 360])
+                                 .range([20, 400]);
+
+                const cScale = d3.scaleLinear()
+                                 .domain([0, 100])
+                                 .range([400, 20]);
+
+
+                function showCircles(lightness){
+                    svg1.selectAll('circle').data(colorDict)
+                        .join('circle')
+                        .attr('r', 10)
+                        .attr('cx', d => hScale(d['h']))
+                        .attr('cy', d => cScale(d['c']))
+                        .attr('fill', d => d3.hcl(d['h'], d['c'], lightness));
+                }
+
+                showCircles(80);
+
+                d3.select('#slider')
+                    .on('input', function(){
+                        showCircles(this.value);
+                })
+
+            
+
+            </script>
+
+    </body>
+</html>
+
