@@ -1,0 +1,109 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/10/18 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netID: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://d3js.org/topojson.v3.min.js"></script>
+        <title>HW7</title>
+    </head>
+    
+    <body>
+        <br>
+        <!-- P1 -->
+        <p id="p1">
+            <b>Problem 1:<br></b>
+            <br>
+            <svg id="choropleth" height="770" width="990" style="margin:20px"></svg>
+            <ul id="ulist"></ul>
+            <script>
+                const svg1 = d3.select("#choropleth");
+                const width = svg1.attr("width");
+                const height = svg1.attr("height");
+                const margin = { top: 10, right: 10, bottom: 10, left: 10};
+                const mapWidth = width - margin.left - margin.right;
+                const mapHeight = height - margin.top - margin.bottom;
+                const viewport = svg1.append("g")
+                                .attr("transform","translate("+margin.left+","+margin.top+")");
+                const ulist = d3.select("#ulist");
+
+                const loadData = async function(){
+
+                    const nyincome = await d3.json("ny_income.topo.json");
+                    console.log(nyincome);
+                    var zips = topojson.feature(nyincome, nyincome.objects.zip_codes);
+                    var zipsMesh = topojson.mesh(nyincome, nyincome.objects.zip_codes);
+                    var stateMesh = topojson.mesh(nyincome, nyincome.objects.state);
+                    var projection = d3.geoMercator().fitSize([mapWidth, mapHeight], zips);
+                    var path = d3.geoPath().projection(projection);
+                    const colors = ["#57ec8b", "#1ba75a", "#3cce9d", "#128b73", "#053d32" ];
+                
+                    //const colors = ["#b9efb8", "#78eb77", "#4cd94b", "#1db21c", "#0e6d0e" ];
+                    var values = d3.map(nyincome.objects.zip_codes.geometries, d => d.properties.median_income);
+                    console.log(values);
+                    const zipScale = d3.scaleQuantile()
+                                        .domain(values)
+                                        .range(colors);
+                    
+                    viewport.selectAll("path.zip")
+                            .data(zips.features)
+                            .join("path")
+                            .attr("class", "zip")
+                            .attr("d", path)
+                            .attr("fill", d => zipScale(d.properties.median_income));
+                    
+                    viewport.append("path")
+                            .datum(zipsMesh)
+                            .attr('class', 'zipoutline')
+                            .style('fill', 'none')
+                            .attr('d', path)
+                            .attr('stroke', 'white')
+                            .attr('stroke-width', 1);
+
+                    viewport.append("path")
+                            .datum(stateMesh)
+                            .attr('class', 'stateoutline')
+                            .style('fill', 'none')
+                            .attr('d', path)
+                            .attr('stroke', 'darkgray')
+                            .attr('stroke-width', 3);
+
+                    let ithaca_coordinates = projection([-76.4850, 42.4476]);
+                    viewport.append("circle")
+                            .attr("cx", ithaca_coordinates[0])
+                            .attr("cy", ithaca_coordinates[1])
+                            .attr("r", 5)
+                            .attr("fill", "black");
+
+                    var plotZoom = d3.zoom()
+                                     .scaleExtent([1, 10])
+                                     .on("zoom", plotZommed);
+
+                    svg1.call(plotZoom);
+                    
+                    function plotZommed(event){
+                        viewport.attr("transform", event.transform);
+                        viewport.selectAll("path.zipoutline")
+                                .attr("stroke-width", 1 / event.transform.k);
+                    }
+
+                    let threshold = zipScale.quantiles();
+                    ulist.selectAll("li")
+                         .data(threshold)
+                         .join("li")
+                         .text(d => d);
+                
+
+                }
+                
+                loadData(); 
+            </script>
+        </p>
+       
+    </body>
+</html>
+
