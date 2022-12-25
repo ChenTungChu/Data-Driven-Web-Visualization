@@ -1,0 +1,199 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/11/02 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netID: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>HW9</title>
+
+        <style>
+            .gridlines line{
+                stroke: #ddd;
+            }
+            .gridlines .domain{
+                stroke: none;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <br>
+        <!-- P1 -->
+        <p id="p1"><b>Problem 1:</b></p>
+            <p>
+                For the design of this visualization, I started using linear scale for my axis,
+                and I quickly found out that many of the data points would overlap to each other,
+                which may not be a good visualization. Therefore, I decided to use log scale for my axis.
+                In order to find the fake points in the dataset, I found a simple but also effictive way:
+                Since we want to compare the wine score and the price in the US, I filtered out the points which 
+                were located outside the US or not even in our planet.
+                <br>
+                After filtering out the fake/invalid points, I removed a total of <b>84</b> fake points.
+                <br><br>
+                For my x-axis and y-axis, I used the <i>extent</i> function to find the maximum and minimum values in prices and points data set
+                and set up the range within the svg canvas dimensions so all the valid points would fit in the canvas.
+                For the color of the points, I used the <i>scaleOrdinal</i> function to assign colors in <i>schemeCategory10</i> to different states.
+                <br><br>
+                For each data point, I appended each circle with a radius of 5 and the center position of the circle was based on the price and point.
+                In this problem, we implemented <i>jitter()</i> to reduce the overlap of the points. For its advantage, it is clearly that we reduce the overlap
+                a bit comparing to the distribution without jittering. The disadvantage of it maybe that the points are not accurate since it moved between 4 pixels.
+                <br><br>
+                Since we use different colors to represent the origin states, I think the user can easily see which state reproduced better wine by simply
+                looking at the chart and the point just reflects the price and the score of the wine. But the chart might also confuse the user since the points are still
+                overlapping too much.   
+            
+            
+            
+            
+            </p>
+            <b></b>
+            <br>
+            <svg id = "scatterplot" height = "500" width = "800"></svg>
+            <div>
+                <svg id="legend" height=300 width=450></svg>
+            </div>
+            <script>
+                const svg = d3.select("svg#scatterplot");
+                const width = svg.attr("width");
+                const height = svg.attr("height");
+                const margin = {top: 10, right: 10, bottom: 50, left: 50};
+                const chartWidth = width - margin.left - margin.right;
+                const chartHeight = height - margin.top - margin.bottom;
+                let chartArea = svg.append("g")
+                                   .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+                const datareq = async function(){
+                    let data = await d3.json("wines.json");
+                    let pre_len = data.length;
+
+                    data.forEach((d, i) => {
+                        d['price'] = Number(d['price'].replace('$', ''));
+                        d['points'] = Number(d['points']);
+                    });
+
+                    data = data.filter(d => d['country'] == 'US');
+                    //out = data.filter(d => d['state'] == 'California' || d['state'] == 'New York'
+                    //                   || d['state'] == 'Washington' || d['state'] == 'Oregon')
+                    //console.log(out);
+
+                    let exact_count = pre_len - data.length;
+                    //console.log(exact_count);
+                    console.log(data.length);
+                    console.log(data);
+
+                    const priceExtent = d3.extent(data, d => d['price']);
+                    const priceScale = d3.scaleLog()
+                                         .domain(priceExtent)
+                                         .range([0, chartWidth]);
+
+                    const pointsExtent = d3.extent(data, d => d['points']);
+                    const pointsScale = d3.scaleLinear()
+                                          .domain(pointsExtent)
+                                          .range([chartHeight, 0]);
+
+                    const colorScale = d3.scaleOrdinal()
+                                         .domain(data.map(d => d['state']))
+                                         .range(d3.schemeCategory10);
+
+                    //console.log(priceExtent);
+
+
+                    data.forEach((d, i) => {
+                        chartArea.append("circle")
+                                 .attr("class", "circle")
+                                 .attr("index", i)
+                                 .attr("cx", priceScale(d['price']) + jitter())
+                                 .attr("cy", pointsScale(d['points']) + jitter())
+                                 .attr("r", 5)
+                                 .attr("fill", colorScale(d['state']))
+                                 .attr("opacity", 0.6)
+                                 .on("mouseover", mouseEnterPoint)
+                                 .on("mouseout", mouseLeavePoint);
+                                 
+                    });
+
+                    function jitter(){
+                        return Math.random() * 8 - 4;
+                    }
+                    
+                    let bottomAxis = d3.axisBottom(priceScale);
+                    let bottomGridLines = d3.axisBottom(priceScale)
+                                            .tickSize(-chartHeight - 10)
+                                            .tickFormat('');
+                    
+                    let leftAxis = d3.axisLeft(pointsScale);
+                    let leftGridLines = d3.axisLeft(pointsScale)
+                                          .tickSize(-chartWidth - 10)
+                                          .tickFormat('');
+
+                
+                    svg.append("g")
+                          .attr("class", "y axis")
+                          .attr("transform", `translate(${margin.left - 10}, ${margin.top})`)
+                          .call(leftAxis);
+                    
+                    svg.append("g")
+                          .attr("class", "y gridlines")
+                          .attr("transform", `translate(${margin.left - 10}, ${margin.top})`)
+                          .call(leftGridLines);
+
+                    svg.append("g")
+                          .attr("class", "x axis")
+                          .attr("transform", `translate(${margin.left}, ${chartHeight + margin.top*2})`)
+                          .call(bottomAxis);
+
+                    svg.append("g")
+                            .attr("class", "x gridlines")
+                            .attr("transform", `translate(${margin.left}, ${chartHeight + margin.top*2})`)
+                            .call(bottomGridLines);
+
+                    chartArea.raise();
+
+                    let txt = chartArea.append("text")
+                                     .attr("fill", "black")
+                                     .attr("text-anchor", "middle")
+                                     .attr("alignment-baseline", "hanging")
+                                     .attr("x", chartWidth/2.0)
+                                     .attr("y", 0);
+
+                    function mouseEnterPoint(){
+                        let point = d3.select(this)
+                                      .attr("opacity", 1.0)
+                                      .attr("r", 8)
+                                      .attr("stroke", "black")
+                                      .attr("stroke-width", 4);
+                                      
+                        let title = data[point.attr("index")]['title'];
+                        console.log(title);
+                        let x = Number(point.attr("cx"));
+                        let y = Number(point.attr("cy"));
+                        txt.text(title)
+                           .style("visibility", "visible")
+                           .style("font-size", "14px")
+                           .attr("text-anchor", "middle")
+                           .attr("alignment-baseline", "hanging");
+                    }
+
+                    function mouseLeavePoint(){
+                        txt.style("visibility", "hidden");
+                        d3.select(this)
+                          .attr("opacity", 0.6)
+                          .attr("r", 5)
+                          .attr("stroke", "none");
+                    }
+                    
+                }
+
+                
+                
+                datareq();
+            </script>
+
+       
+    </body>
+</html>
+
