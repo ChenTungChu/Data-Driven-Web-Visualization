@@ -1,0 +1,77 @@
+<!-- author: cc2396 -->
+<!-- date: 2022/11/20 -->
+
+<html>
+    <h3>Name: Chen-Tung Chu <br>
+        netID: cc2396<br>
+    </h3>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>HW10</title>
+    </head>
+    
+    <body>
+        <br>
+        <!-- P1 -->
+        <p id="p1"><b>Problem 1:</b></p>
+            <div id = "barcodes">
+                
+            </div>
+            <script>
+               
+                const datareq = async function(){
+                    let data = await d3.json("movie_barcodes.json");
+                    //console.log(data);
+
+                   
+                    var mainDiv = document.getElementById("barcodes");
+                    data.forEach((d, i) => {
+                        var newdiv = document.createElement("div");
+                        // create <h5> element inside the new div
+                        var newh5 = document.createElement("h5");
+                        newh5.innerHTML = d.title;
+                        newdiv.appendChild(newh5);
+                        var canvas = document.createElement("canvas");
+                        canvas.width = 800;
+                        canvas.height = 100;
+                        var ctx = canvas.getContext("2d");
+                        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        var pixels = imageData.data;
+                        
+                        d.bars.forEach((d, i) => {
+                            //console.log(d);
+                            color = d.color;
+                            let num = parseInt(color.replace('#',''), 16);
+                            let r = (num >> 16) & 255;
+                            let g = (num >> 8) & 255;
+                            let b = num & 255;
+                            let xPos = d.x
+                            
+                            for(let j = 0; j < 100; j++){
+                                yLocal = 4*(j*canvas.width + xPos)
+                                pixels[yLocal + 0] = r;
+                                pixels[yLocal + 1] = g;
+                                pixels[yLocal + 2] = b;
+                                pixels[yLocal + 3] = 255;
+
+                            }
+
+                        })
+                        ctx.putImageData(imageData, 0, 0);
+
+                        newdiv.appendChild(canvas);
+                        mainDiv.appendChild(newdiv);
+                        
+                    });
+
+                
+                }    
+                
+                datareq();
+            </script>
+
+       
+    </body>
+</html>
+
